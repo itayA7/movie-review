@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Home Page</title>
+	<style type="text/css">
+		
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: grey;
+  top: 0;
+  width: 100%;
+}
+
+li {
+background-color: grey;
+  float: left;
+
+}
+
+li button{
+	font-size: x-large;
+	border: none;
+	background-color: grey;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 30px;
+  text-decoration: none;
+}
+
+li button:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #04AA6D;
+}
+	</style>
+
+
+</head>
+
+
+
+<body>
+
+
+<ul>
+  <li><button class="active">Home</button> </li>
+  <li><button >Home</button> </li>
+  <li><button >Home</button> </li>
+  <li><button >Home</button> </li>
+</ul>
+
+
+<h1>Welcome to the webstie</h1>
+<p> here ypu can en</p>
+
+
+
+
+<script type="text/javascript">
+	fetch('http://127.0.0.1:5000/')
+  .then(
+    function(response) {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+
+      // Examine the text in the response
+      response.json().then(function(data) {
+        console.log(data);
+      });
+    }
+  )
+  .catch(function(err) {
+    console.log('Fetch Error :-S', err);
+  });
+
+</script>
+	
+
+
+
+</body>
+
+
+</html>
