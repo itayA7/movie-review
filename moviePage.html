@@ -63,7 +63,7 @@ async function placeMovie(movieName) {
   const posterLink= await searchPoster.json();
   console.log(posterLink);
   document.getElementById('poster').src = posterLink;
-  const searchTrailer = await fetch("https://flaskserver12.herokuapp.com/trailer"+movieId);
+  const searchTrailer = await fetch("https://flaskserver12.herokuapp.com/trailer/"+movieId);
   const trailerLink= await searchTrailer.json();
   console.log(trailerLink);
   document.getElementById('trailer').src = trailerLink;
