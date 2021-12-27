@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>movie page</title>
+	  <link rel="stylesheet" type="text/css" href="design.css">
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css'><link rel="stylesheet" href="./style.css">
+
+
+</head>
+
+
+
+<body>
+
+  <div class="topnav">
+  <a  href="index.html">Home</a>
+  <a href="login.html">Login</a>
+  <a href="#contact">Register</a>
+  <div class="search-container">
+    <form action="moviePage.html">
+      <input type="text" placeholder="Search.." name="search">
+      <button type="submit">search</button>
+    </form>
+  </div>
+</div>
+
+
+
+<div class="title">  
+<img  id="poster"  width="500" height="600 alt="no poster"  >
+  <h1 id="movieTitle">         </h1> 
+  <p id="description">         </p>
+<label id="actors"></label>
+
+<iframe id="trailer"  width="700" height="340" frameborder="0" allowfullscreen  ></iframe>
+
+</div>
+
+
+
+
+<script type="text/javascript">
+  
+async function placeMovie(movieName) {
+  var defultUrl="https://flaskserver12.herokuapp.com/search/";
+  var url=defultUrl+movieName;
+  const x = await fetch(url);
+  const movieId= await x.json();
+  console.log(movieId);
+  if(movieId ==false) {
+  console.log("no movie found");
+  document.getElementById("movieTitle").remove();
+  document.getElementById("poster").remove();
+  document.getElementById("movieTitle").remove();
+  document.getElementById("description").remove();
+  document.getElementById("actors").remove();
+  document.getElementById("trailer").remove();
+  alert("no result for "+movieName+".Please try again")
+  return false;
+  } 
+  const searchPoster = await fetch("https://flaskserver12.herokuapp.com/poster/"+movieId);
+  const posterLink= await searchPoster.json();
+  console.log(posterLink);
+  document.getElementById('poster').src = posterLink;
+  const searchTrailer = await fetch("https://flaskserver12.herokuapp.com/trailer"+movieId);
+  const trailerLink= await searchTrailer.json();
+  console.log(trailerLink);
+  document.getElementById('trailer').src = trailerLink;
+  const searchActors = await fetch("https://flaskserver12.herokuapp.com/movie_actors/"+movieId);
+  const actorsList= await searchActors.json();
+  console.log(actorsList);
+  document.getElementById('actors').innerHTML ="With: " +actorsList;
+  const searchTitle = await fetch("https://flaskserver12.herokuapp.com/title/"+movieId);
+  const movieTitle= await searchTitle.json();
+  console.log(movieTitle);
+  document.getElementById('movieTitle').innerHTML = movieTitle;
+  const searchDescription = await fetch("https://flaskserver12.herokuapp.com/description/"+movieId);
+  const description= await searchDescription.json();
+  console.log(description);
+  document.getElementById('description').innerHTML = description;
+  
+  
+  } 
+
+const params = new URLSearchParams(window.location.search);
+var search=params.get('search');
+console.log(search);
+if (search==""){
+  console.log("no movie insert");  
+  document.getElementById("movieTitle").remove();
+  document.getElementById("poster").remove();
+  document.getElementById("description").remove();
+  document.getElementById("actors").remove();
+  document.getElementById("trailer").remove();
+  var errorMessage="please write a movie name";
+  alert(errorMessage);
+
+}
+else{
+  placeMovie(search);
+}
+
+
+</script>
+
+	
+
+<div id="particles-js"></div>
+ <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css'></script>
+  <script src='https://code.jquery.com/jquery-1.11.1.min.js'></script><script  src="./script.js"></script>
+
+
+</body>
+
+
+</html>

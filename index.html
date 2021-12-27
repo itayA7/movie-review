@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+	<title>Home Page</title>
+	<link rel="stylesheet" href="design.css">
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css'><link rel="stylesheet" href="./style.css">
+
+</head>
+
+
+
+
+
+
+<body>
+
+
+
+<div class="topnav">
+  <a class="active" href="#home">Home</a>
+  <a href="login.html">Login</a>
+  <a href="#contact">Register</a>
+  <div class="search-container">
+    <form action="moviePage.html">
+      <input type="text" placeholder="Search.." name="search">
+      <button type="submit">search</button>
+    </form>
+  </div>
+</div>
+
+
+<div class="info">
+<br> <br> <br>
+<h1>Welcome to the webstie</h1>
+<br> <br> <br>
+
+<p>Now you can enjoy from reviews for the most popular movies in the world!</p>
+<br>
+<p> to enjoy the full experience of the website please <a href="login.html" >login</a></p>  
+
+ </div>
+
+
+
+<script type="text/javascript">
+  var movie_id=2;
+
+async function getText(file,typeOfRequest) {
+  const x = await fetch(file);
+  const res= await x.json();
+
+  if (typeOfRequest=="poster"){
+    document.getElementById('poster').src = res;
+  }
+  else if(typeOfRequest=="trailer"){
+    document.getElementById('trailer').src=res;
+
+  }
+
+  
+}
+</script>
+	
+
+<div id="particles-js"></div>
+ <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css'></script>
+  <script src='https://code.jquery.com/jquery-1.11.1.min.js'></script><script  src="./script.js"></script>
+
+</body>
+
+
+</html>
