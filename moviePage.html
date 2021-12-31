@@ -3,8 +3,8 @@
 
 <head>
 	<title>movie page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	  <link rel="stylesheet" type="text/css" href="design.css">
-  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css'><link rel="stylesheet" href="./style.css">
 
 
 </head>
@@ -15,8 +15,8 @@
 
   <div class="topnav">
   <a  href="index.html">Home</a>
-  <a href="login.html">Login</a>
-  <a href="#contact">Register</a>
+  <a href="login.html" id="loginLink">Login</a>
+  <a href="register.html">Register</a>
   <div class="search-container">
     <form action="moviePage.html">
       <input type="text" placeholder="Search.." name="search">
@@ -33,23 +33,172 @@
   <p id="description">         </p>
 <label id="actors"></label>
 
+
+<div class="stars">
+<span class="heading" >User Rating</span>
+<span  id="star1"></span>
+<span  id="star2"></span>
+<span  id="star3"></span>
+<span  id="star4"></span>
+<span  id="star5"></span>
+<p id="avergaeLine"></p>
+</div>
+
 <iframe id="trailer"  width="700" height="340" frameborder="0" allowfullscreen  ></iframe>
 
 </div>
 
 
 
+<div class="vote">
+<p class="text" id="voteText"></p>
+<div class="rating" id="rating">
+  <input type="radio" value=5 name="star"/><span class="star"> </span>
+  <input type="radio" value=4 name="star"/><span class="star"> </span>
+  <input type="radio" value=3 name="star"/><span class="star"> </span>
+  <input type="radio" value=2 name="star"/><span class="star"> </span>
+  <input type="radio" value=1 name="star"/><span class="star"> </span>
+  <span class="emo" id="emojy"> </span>
+  <button onclick="voting()" id="submit">Submit</button>
+</div>
+</div>
+
+
+
+
+
+
 
 <script type="text/javascript">
+
+if (sessionStorage.getItem("userId")==null){
+    sessionStorage.setItem("userId",0)
+    sessionStorage.setItem("username",0)
+
+}
+
+
+if (sessionStorage.getItem("userId")!=0){
+    document.getElementById("loginLink").innerHTML="Logout";
+}
+
+
+
+async function voting(){
+  if(sessionStorage.getItem('userId')==0){
+    alert("please login to vote!")
+    return;
+  }
+  var score=0;
+  var  vote= document.getElementsByName('star');
+    for(i = 0; i < vote.length; i++) {
+          if(vote[i].checked){
+            score=vote[i].value;
+          }         
+    }
+  if(score==0){
+    alert("you didn't select anything");
+    return ; 
+  }
+  movieId=sessionStorage.getItem('movieId');
+  var data={'score':score};
+  const x = await fetch("https://flaskserver12.herokuapp.com/rating/"+movieId+"/"+sessionStorage.getItem("userId"), {
+    method: 'POST', 
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data) 
+  });
+  const respone=await x.json();
+  console.log(respone);
+  if (respone==true){
+  document.getElementById('rating').remove();
+  document.getElementById('voteText').innerHTML="Thank you for your vote";
+
+  }
+
+
+}
+
+
+
+async function getRatingInfo(movieId) {
+  var url="https://flaskserver12.herokuapp.com/rating/"+movieId+"/"+sessionStorage.getItem('userId');
+  const x = await fetch(url);
+  const ratingInfo= await x.json();
+  var userScore=ratingInfo['userScore']
+  console.log(userScore)
+  var average=ratingInfo['average']
+  if (average==false){
+    console.log("false");
+    document.getElementById('star1').remove();
+    document.getElementById('star2').remove();
+    document.getElementById('star3').remove();
+    document.getElementById('star4').remove();
+    document.getElementById('star5').remove();
+    document.getElementById('avergaeLine').innerHTML="no ratings avialable";
+  }
+  else if (average>=4.5){
+    document.getElementById('star1').className="fa fa-star checked" ;
+    document.getElementById('star2').className="fa fa-star checked" ;
+    document.getElementById('star3').className="fa fa-star checked" ;
+    document.getElementById('star4').className="fa fa-star checked" ;
+    document.getElementById('star5').className="fa fa-star checked" ;
+    document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
+
+  }
+  else if (average>=3.5){
+    document.getElementById('star1').className="fa fa-star checked" ;
+    document.getElementById('star2').className="fa fa-star checked" ;
+    document.getElementById('star3').className="fa fa-star checked" ;
+    document.getElementById('star4').className="fa fa-star checked" ;
+    document.getElementById('star5').className="fa fa-star" ;
+    document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
+  }
+  else if (average>=2.5){
+    document.getElementById('star1').className="fa fa-star checked" ;
+    document.getElementById('star2').className="fa fa-star checked" ;
+    document.getElementById('star3').className="fa fa-star checked" ;
+    document.getElementById('star4').className="fa fa-star" ;
+    document.getElementById('star5').className="fa fa-star" ;
+    document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
+  }
+  else if (average>=1.5){
+    document.getElementById('star1').className="fa fa-star checked" ;
+    document.getElementById('star2').className="fa fa-star checked" ;
+    document.getElementById('star3').className="fa fa-star" ;
+    document.getElementById('star4').className="fa fa-star" ;
+    document.getElementById('star5').className="fa fa-star" ;
+    document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
+  }
+  else{
+    console.log("else");
+    document.getElementById('star1').className="fa fa-star checked" ;
+    document.getElementById('star2').className="fa fa-star" ;
+    document.getElementById('star3').className="fa fa-star" ;
+    document.getElementById('star4').className="fa fa-star" ;
+    document.getElementById('star5').className="fa fa-star" ;
+    document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
+  }
+  if (userScore!=false){
+  document.getElementById('voteText').innerHTML="You already voted for this movie("+userScore+").Do you want to change it?";
+  }
+  else{
+    document.getElementById('voteText').innerHTML="Already watch the movie ? you can make your vote now!"
+  }
+}
+ 
+
+
   
 async function placeMovie(movieName) {
   var defultUrl="https://flaskserver12.herokuapp.com/search/";
   var url=defultUrl+movieName;
   const x = await fetch(url);
   const movieId= await x.json();
-  console.log(movieId);
   if(movieId ==false) {
   console.log("no movie found");
+  sessionStorage.getItem('movieId').clear();
   document.getElementById("movieTitle").remove();
   document.getElementById("poster").remove();
   document.getElementById("movieTitle").remove();
@@ -59,33 +208,28 @@ async function placeMovie(movieName) {
   alert("no result for "+movieName+".Please try again")
   return false;
   } 
-  const searchPoster = await fetch("https://flaskserver12.herokuapp.com/poster/"+movieId);
-  const posterLink= await searchPoster.json();
-  console.log(posterLink);
+  const searchMovieInfo = await fetch("https://flaskserver12.herokuapp.com/movie_info/"+movieId);
+  const movieInfo= await searchMovieInfo.json();
+  var posterLink=await movieInfo['poster'];
+  var trailerLink=await movieInfo['trailer'];
+  var actorsList=await movieInfo['actors'];
+  var movieTitle=await movieInfo['title'];
+  var description=await movieInfo['description'];
   document.getElementById('poster').src = posterLink;
-  const searchTrailer = await fetch("https://flaskserver12.herokuapp.com/trailer/"+movieId);
-  const trailerLink= await searchTrailer.json();
-  console.log(trailerLink);
   document.getElementById('trailer').src = trailerLink;
-  const searchActors = await fetch("https://flaskserver12.herokuapp.com/movie_actors/"+movieId);
-  const actorsList= await searchActors.json();
-  console.log(actorsList);
   document.getElementById('actors').innerHTML ="With: " +actorsList;
-  const searchTitle = await fetch("https://flaskserver12.herokuapp.com/title/"+movieId);
-  const movieTitle= await searchTitle.json();
   console.log(movieTitle);
   document.getElementById('movieTitle').innerHTML = movieTitle;
-  const searchDescription = await fetch("https://flaskserver12.herokuapp.com/description/"+movieId);
-  const description= await searchDescription.json();
-  console.log(description);
   document.getElementById('description').innerHTML = description;
-  
-  
+  sessionStorage.setItem("movieId",movieId)
+  getRatingInfo(movieId);
   } 
+
+
+
 
 const params = new URLSearchParams(window.location.search);
 var search=params.get('search');
-console.log(search);
 if (search==""){
   console.log("no movie insert");  
   document.getElementById("movieTitle").remove();
@@ -102,13 +246,11 @@ else{
 }
 
 
+
 </script>
 
 	
 
-<div id="particles-js"></div>
- <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css'></script>
-  <script src='https://code.jquery.com/jquery-1.11.1.min.js'></script><script  src="./script.js"></script>
 
 
 </body>
