@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <title>login</title>
   <link rel="stylesheet" type="text/css" href="design.css">
-  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css'><link rel="stylesheet" href="./style.css">
+
 
 </head>
 <body>
 
 <div class="topnav">
   <a  href="index.html">Home</a>
-  <a href="login.html" class="active">Login</a>
-  <a href="#contact">Register</a>
+  <a href="login.html" class="active" id="loginLink">Login</a>
+  <a href="register.html">Register</a>
   <div class="search-container">
     <form action="moviePage.html">
       <input type="text" placeholder="Search.." name="search">
@@ -26,20 +26,58 @@
 <div class="container">
 	<div id="login-box">
 		<div class="logo">
-			<img src="http://placehold.it/100x100?text=Welcome" class="img img-responsive img-circle center-block"/>
 			<h1 class="logo-caption"><span class="tweak">L</span>ogin</h1>
 		</div><!-- /.logo -->
 		<div class="controls">
-			<input type="text" name="username" placeholder="Username" class="form-control" />
-			<input type="password" name="password" placeholder="Password" class="form-control" />
-			<button type="button" class="btn btn-default btn-block btn-custom">Login</button>
+			<input type="text" id="username" name="username" placeholder="Username" class="form-control" />
+			<input type="password" id="password"  name="password" placeholder="Password" class="form-control" />
+			<button type="button" onclick="login()"  class="btn btn-default btn-block btn-custom">Login</button>
+      <p id="status"  style="color: white" style="font-family: 'Roboto', sans-serif">   </p>
+
 		</div>
 	</div>
 </div>
-<div id="particles-js"></div>
-<!-- partial -->
-  <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css'></script>
-	<script src='https://code.jquery.com/jquery-1.11.1.min.js'></script><script  src="./script.js"></script>
+
+
+<script type="text/javascript">
+  
+
+if (sessionStorage.getItem("userId")!=null){
+    sessionStorage.setItem("userId",0)
+    sessionStorage.setItem("username",0)
+}
+
+
+
+async function login(){
+  var givenName=document.getElementById('username').value;  
+  var givenPassword=document.getElementById('password').value;  
+  if (givenName=="" || givenPassword==""){
+    alert("you have to fill  password and username");
+    return ; 
+  }
+  const x = await fetch("https://flaskserver12.herokuapp.com/login/"+givenName+"/"+givenPassword)
+  const respone=await x.json();
+  console.log(respone);
+  if (respone==false){
+      var message="username/password not correct";
+  }
+  else{
+      var userId=await respone['userId'];
+      var username=await respone['username'];
+      sessionStorage.setItem("username",username );
+      sessionStorage.setItem("userId",userId)
+      location.replace("index.html")
+  }
+  document.getElementById("status").innerHTML=message;
+ } 
+
+
+</script>
+
+
+
+
 
 
 </body>

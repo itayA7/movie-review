@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>movie page</title>
+	  <link rel="stylesheet" type="text/css" href="design.css">
+
+
+</head>
+
+
+
+<body>
+<h1 id="error"></h1>
+
+<iframe id="trailer" width="420" height="315" frameborder="0" allowfullscreen></iframe>
+<img  id="poster"  width="500" height="600 alt="no poster" >
+
+
+<script type="text/javascript">
+  
+async function placeMovie(movieName) {
+  var defultUrl="http://192.168.1.149:5000/movie/";
+  var url=defultUrl+movieName;
+  const x = await fetch(url);
+  const movieId= await x.json();
+  console.log(movieId)
+  if(movieId ==false) {
+  console.log("no movie found")
+  document.getElementById("trailer").remove();
+  document.getElementById("poster").remove();
+  document.getElementById("error").innerHTML = "no movie found";
+  return false;
+  } 
+  const searchPoster = await fetch("http://192.168.1.149:5000/poster/"+movieId);
+  const posterLink= await searchPoster.json();
+  console.log(posterLink)
+  document.getElementById('poster').src = posterLink;
+  const searchTrailer = await fetch("http://192.168.1.149:5000/trailer/"+movieId);
+  const trailerLink= await searchTrailer.json();
+  console.log(trailerLink)
+  document.getElementById('trailer').src = trailerLink;
+
+  } 
+
+const params = new URLSearchParams(window.location.search);
+var search=params.get('search');
+console.log(search);
+if (search==""){
+  console.log("no movie insert");
+  document.getElementById("error").innerHTML = "no movie found";
+  document.getElementById("poster").remove();
+  document.getElementById("error").innerHTML = "no movie found";
+}
+else{
+  placeMovie(search);
+}
+
+
+</script>
+
+	
+
+
+
+</body>
+
+
+</html>
