@@ -105,7 +105,7 @@ async function voting(){
   }
   movieId=sessionStorage.getItem('movieId');
   var data={'score':score};
-  const x = await fetch("http://192.168.1.149:5000/rating/"+movieId+"/"+sessionStorage.getItem("userId"), {
+  const x = await fetch("https://flaskserver12.herokuapp.com/rating/"+movieId+"/"+sessionStorage.getItem("userId"), {
     method: 'POST', 
     headers: {
       'Content-Type': 'application/json'
