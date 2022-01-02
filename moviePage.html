@@ -3,7 +3,7 @@
 
 <head>
 	<title>movie page</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://kit.fontawesome.com/d9ada2350e.js" crossorigin="anonymous"></script>
 	  <link rel="stylesheet" type="text/css" href="design.css">
 
 
@@ -21,6 +21,8 @@
     <form action="moviePage.html">
       <input type="text" placeholder="Search.." name="search">
       <button type="submit">search</button>
+
+
     </form>
   </div>
 </div>
@@ -34,7 +36,7 @@
 <label id="actors"></label>
 
 
-<div class="stars">
+<div class="stars" id="userRating">
 <span class="heading" >User Rating</span>
 <span  id="star1"></span>
 <span  id="star2"></span>
@@ -62,6 +64,7 @@
   <button onclick="voting()" id="submit">Submit</button>
 </div>
 </div>
+
 
 
 
@@ -102,7 +105,7 @@ async function voting(){
   }
   movieId=sessionStorage.getItem('movieId');
   var data={'score':score};
-  const x = await fetch("https://flaskserver12.herokuapp.com/rating/"+movieId+"/"+sessionStorage.getItem("userId"), {
+  const x = await fetch("http://192.168.1.149:5000/rating/"+movieId+"/"+sessionStorage.getItem("userId"), {
     method: 'POST', 
     headers: {
       'Content-Type': 'application/json'
@@ -114,8 +117,7 @@ async function voting(){
   if (respone==true){
   document.getElementById('rating').remove();
   document.getElementById('voteText').innerHTML="Thank you for your vote";
-document.location.reload();
-
+  document.location.reload();
 
   }
 
@@ -138,9 +140,9 @@ async function getRatingInfo(movieId) {
     document.getElementById('star3').remove();
     document.getElementById('star4').remove();
     document.getElementById('star5').remove();
-    document.getElementById('avergaeLine').innerHTML="no ratings avialable";
+    document.getElementById('avergaeLine').innerHTML="no ratings available";
   }
-  else if (average>=4.5){
+  else if (average>4.5){
     document.getElementById('star1').className="fa fa-star checked" ;
     document.getElementById('star2').className="fa fa-star checked" ;
     document.getElementById('star3').className="fa fa-star checked" ;
@@ -149,7 +151,17 @@ async function getRatingInfo(movieId) {
     document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
 
   }
-  else if (average>=3.5){
+
+    else if (average>4){
+    document.getElementById('star1').className="fa fa-star checked" ;
+    document.getElementById('star2').className="fa fa-star checked" ;
+    document.getElementById('star3').className="fa fa-star checked" ;
+    document.getElementById('star4').className="fa fa-star checked" ;
+    document.getElementById('star5').className="fas fa-star-half-alt checked" ;
+    document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
+
+  }
+  else if (average>3.5){
     document.getElementById('star1').className="fa fa-star checked" ;
     document.getElementById('star2').className="fa fa-star checked" ;
     document.getElementById('star3').className="fa fa-star checked" ;
@@ -157,7 +169,16 @@ async function getRatingInfo(movieId) {
     document.getElementById('star5').className="fa fa-star" ;
     document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
   }
-  else if (average>=2.5){
+    else if (average>3){
+    document.getElementById('star1').className="fa fa-star checked" ;
+    document.getElementById('star2').className="fa fa-star checked" ;
+    document.getElementById('star3').className="fa fa-star checked" ;
+    document.getElementById('star4').className="fas fa-star-half-alt checked" ;
+    document.getElementById('star5').className="fa fa-star" ;
+    document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
+
+  }
+  else if (average>2.5){
     document.getElementById('star1').className="fa fa-star checked" ;
     document.getElementById('star2').className="fa fa-star checked" ;
     document.getElementById('star3').className="fa fa-star checked" ;
@@ -165,7 +186,16 @@ async function getRatingInfo(movieId) {
     document.getElementById('star5').className="fa fa-star" ;
     document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
   }
-  else if (average>=1.5){
+  else if (average>2){
+    document.getElementById('star1').className="fa fa-star checked" ;
+    document.getElementById('star2').className="fa fa-star checked" ;
+    document.getElementById('star3').className="fas fa-star-half-alt checked" ;
+    document.getElementById('star4').className="fa fa-star" ;
+    document.getElementById('star5').className="fa fa-star" ;
+    document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
+
+  }
+  else if (average>1.5){
     document.getElementById('star1').className="fa fa-star checked" ;
     document.getElementById('star2').className="fa fa-star checked" ;
     document.getElementById('star3').className="fa fa-star" ;
@@ -173,9 +203,28 @@ async function getRatingInfo(movieId) {
     document.getElementById('star5').className="fa fa-star" ;
     document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
   }
+
+  else if (average>1){
+    document.getElementById('star1').className="fa fa-star checked" ;
+    document.getElementById('star2').className="fas fa-star-half-alt checked" ;
+    document.getElementById('star3').className="fa fa-star" ;
+    document.getElementById('star4').className="fa fa-star" ;
+    document.getElementById('star5').className="fa fa-star" ;
+    document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
+
+  }
+  else if (average>0.5){
+    document.getElementById('star1').className="fa fa-star checked" ;
+    document.getElementById('star2').className="fa fa-star" ;
+    document.getElementById('star3').className="fa fa-star" ;
+    document.getElementById('star4').className="fa fa-star" ;
+    document.getElementById('star5').className="fa fa-star" ;
+    document.getElementById('avergaeLine').innerHTML="the average rating for this movie is  "+average;
+
+  }
   else{
     console.log("else");
-    document.getElementById('star1').className="fa fa-star checked" ;
+    document.getElementById('star1').className="fa fa-star-half-alt checked" ;
     document.getElementById('star2').className="fa fa-star" ;
     document.getElementById('star3').className="fa fa-star" ;
     document.getElementById('star4').className="fa fa-star" ;
@@ -198,16 +247,12 @@ async function placeMovie(movieName) {
   var url=defultUrl+movieName;
   const x = await fetch(url);
   const movieId= await x.json();
-  if(movieId ==false) {
-  console.log("no movie found");
-  sessionStorage.getItem('movieId').clear();
-  document.getElementById("movieTitle").remove();
-  document.getElementById("poster").remove();
-  document.getElementById("movieTitle").remove();
-  document.getElementById("description").remove();
-  document.getElementById("actors").remove();
-  document.getElementById("trailer").remove();
-  alert("no result for "+movieName+".Please try again")
+  if(movieId ==false) {    
+    document.getElementById('userRating').remove();
+    document.getElementById('rating').remove();
+    alert("no result for "+movieName+".Please try again");
+    location.replace("index.html");
+
   return false;
   } 
   const searchMovieInfo = await fetch("https://flaskserver12.herokuapp.com/movie_info/"+movieId);
@@ -232,7 +277,7 @@ async function placeMovie(movieName) {
 
 const params = new URLSearchParams(window.location.search);
 var search=params.get('search');
-if (search==""){
+if (search=="" || search==null){
   console.log("no movie insert");  
   document.getElementById("movieTitle").remove();
   document.getElementById("poster").remove();
@@ -241,6 +286,9 @@ if (search==""){
   document.getElementById("trailer").remove();
   var errorMessage="please write a movie name";
   alert(errorMessage);
+  location.replace("index.html");
+
+
 
 }
 else{
