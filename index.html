@@ -2,7 +2,6 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
 
 	<title>Home Page</title>
 	<link rel="stylesheet" href="design.css">
@@ -35,12 +34,22 @@
 <br> <br> <br>
 <h1 id="pageTitle">Welcome to the webstie</h1>
 <br> <br> <br>
-
 <p>Now you can enjoy from reviews for the most popular movies in the world!</p>
 <br>
 <p id="invite"> to enjoy the full experience of the website please <a href="login.html" >login</a></p>  
 
  </div>
+
+
+
+<h1 class="popularMovies"> Most Popular Movies</h1>
+<div class="reco">
+
+  <a  id="linkMovie1"><img id="poster1"></a>
+  <a  id="linkMovie2"><img id="poster2"></a>
+  <a  id="linkMovie3"><img id="poster3"></a>
+
+</div>
 
 
 
@@ -59,6 +68,22 @@ if (sessionStorage.getItem("userId")!=0){
 }
 
 
+async function placePopularMovies(){ 
+ const searchPopular = await fetch("https://flaskserver12.herokuapp.com/popular_movies");
+ const results=await searchPopular.json();
+  for (let i = 1; i < results.length+1; i++) {
+      var movieId=results[i-1];
+      console.log(movieId);
+      var linkElementId="linkMovie"+i.toString();
+      var posterElementId="poster"+i.toString();
+      const searchPoster=await fetch("https://flaskserver12.herokuapp.com/poster/"+movieId);
+      const posterLink=await searchPoster.json();
+      document.getElementById(posterElementId).src=posterLink;
+      document.getElementById(linkElementId).href="moviePage.html?movieId="+movieId;
+  }
+}
+
+placePopularMovies();
 
 </script>
 	
